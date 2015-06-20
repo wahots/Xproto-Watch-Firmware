@@ -333,14 +333,14 @@ int main(void) {
                 case 2:     // Oscilloscope Menu
                     if(testbit(Key,K1)) {
                         AnalogOn();
-                        RTC.INTCTRL = 0x00;     // Disable RTC interrupts
+                        //RTC.INTCTRL = 0x00;     // Disable RTC interrupts
                         // 1Hz Memory LCD EXTCOMM
                         TCD0.CTRLB = 0b00010000;            // Enable HCMPENA, pin4
                         TCD0.CCAH = 128;                      // Automatic EXTCOMM with Timer D0                        
                         MSO();              // go to MSO
                         TCD0.CTRLB = 0;
                         TCD0.CCAH = 0;
-                        RTC.INTCTRL = 0x05;
+                        //RTC.INTCTRL = 0x05;
                         AnalogOff();
                         old_item=0; step=15; from=-101;
                     }                        

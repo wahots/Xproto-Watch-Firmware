@@ -161,7 +161,7 @@ void Sniff(void) {
     if(testbit(Trigger, round)) page=0x0F;  // Go to last page
     // Setup
     PR.PRPC  = 0x00;        // Enable PORTC peripherals
-    RTC.INTCTRL = 0x01;     // Disable Menu Timeout interrupt
+    //RTC.INTCTRL = 0x01;     // Disable Menu Timeout interrupt
     uint8_t spictrl=0;
     if(M.CHDdecode==i2c) {
         lcd_putsp(PSTR("I2C SNIFFER\nBIT0:SDA BIT1:SCL"));
@@ -428,7 +428,7 @@ exit:
     PORTC.INTCTRL = 0x00;   // Disable PORTC interrupts
     SPIC.CTRL = 0x00;       // Disable SPI
     PR.PRPC  = 0x7C;        // Stop: TWI, USART0, USART1, SPI, HIRES
-    RTC.INTCTRL = 0x05;     // Re enable Time out interrupt
+    //RTC.INTCTRL = 0x05;     // Re enable Time out interrupt
 }
 
 #define SDA_PIN 0

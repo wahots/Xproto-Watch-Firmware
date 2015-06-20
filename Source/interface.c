@@ -56,7 +56,7 @@ ISR(USARTE0_RXC_vect) {
     char command;
     uint8_t *p;
     uint8_t i=0,j;
-    RTC.CNT=0;  // Clear screen saver timer
+    //RTC.CNT=0;  // Clear screen saver timer
     OFFGRN();   // In case the LED was on
     command = USARTE0.DATA;
     switch(command) {
