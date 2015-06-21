@@ -24,6 +24,7 @@
 #include "display.h"
 #include "mygccdef.h"
 #include "hardware.h"
+#include "main.h"
 
 /* Local functions prototypes */
 void LcdDataWrite (unsigned char);
@@ -139,7 +140,7 @@ void dma_displayn(uint8_t n) {
 
 // DMA done, now at most 2 bytes are left to be sent
 ISR(DMA_CH2_vect) {
-    PORTE.OUT=0;    // Turn off LEDs
+	PORTE.OUT=0;    // Turn off LEDs
     if(CLK.CTRL==0) {   // Running at 2MHz
         _delay_us(8);
     }
@@ -148,5 +149,6 @@ ISR(DMA_CH2_vect) {
     }        
     clrbit(LCD_CTRL, LCD_CS);			    // DeSelect
     setbit(DMA.INTFLAGS, 0);
+	if (backlight) PORTE.OUT=0b00000001;     // kamotswind - Turn back on back-light if enabled
 }
 

@@ -380,6 +380,7 @@ int main(void) {
                 TCE1.CTRLB = 0;
 				PR.PRPE  = 0xFF;
                 PORTE.OUT = 0x00;
+				if (backlight) PORTE.OUT=0b00000001;     // kamotswind - Turn back on back-light if enabled
             }
             lcd_goto(16,2);
             lcd_put5x8(mainmenutxt[item-1]);
