@@ -100,21 +100,26 @@ uint8_t options;    // Daylight saving time
 
 
 // RTC Compare, occurs every 1s, phase 180
-ISR(RTC_COMP_vect, ISR_NAKED) { // Naked ISR (No need to save registers)
+ISR(RTC_COMP_vect) {
     EXTCOMML();              // LCD polarity inversion
-    asm("reti");
+	if(backlight) { // kamotswind - new back-light timeout, first draft
+		if((lastbacklight+3) < TCF0.CNT) {
+			backlight = false;
+			clrbit(VPORT1.OUT,0);
+		} else setbit(VPORT1.OUT,0); // Make sure the backlight stays on during screen refresh
+	}
+    //asm("reti");
 }
 
 // RTC Overflow, occurs every 1s, phase 0
 ISR(RTC_OVF_vect) {
-	if(backlight >= 0) { // kamotswolf - new back-light timeout, first draft
-		if(backlight == 0) {
-			backlight = -1;
-			clrbit(VPORT1.OUT,0);
-		}
-		else backlight--;
-	}
     EXTCOMMH();                 // Changing a bit in a VPORT does not change the the Status Register either
+	if(backlight) { // kamotswind - new back-light timeout, first draft
+		if((lastbacklight+3) < TCF0.CNT) {
+			backlight = false;
+			clrbit(VPORT1.OUT,0);
+		} else setbit(VPORT1.OUT,0); // Make sure the backlight stays on during screen refresh
+	}
     //asm("reti");
 }
 

@@ -18,6 +18,7 @@ email me at: gabriel@gabotronics.com
 #define _MAIN_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <avr/eeprom.h>
 #include <avr/pgmspace.h>
 #include "ffft.h"
@@ -199,7 +200,19 @@ void Calibrate(void);
 void CCPWrite( volatile uint8_t * address, uint8_t value );
 
 extern uint8_t EEMEM EESleepTime;     // Sleep timeout in minutes
-extern volatile int8_t backlight; // kamotswolf - back-light timeout remaining in seconds
+
+extern volatile uint16_t lastbacklight; // kamotswind - last timestamp that back-light was requested (for deactivation)
+typedef struct { // kamotswind - swiped from http://www.avrfreaks.net/comment/137037#comment-137037 so we can have some efficient boolean flags
+	bool f0:1;
+	bool f1:1;
+	bool f2:1;
+	bool f3:1;
+	bool f4:1;
+	bool f5:1;
+	bool f6:1;
+	bool f7:1;
+} PackedBool;
+#define backlight ( (volatile PackedBool*)(&GPIOR0) )->f7 // kamotswind - back-light active true/false
 
 // Big buffer to store large but temporary data
 typedef union {
