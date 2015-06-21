@@ -107,6 +107,7 @@ ISR(RTC_COMP_vect, ISR_NAKED) { // Naked ISR (No need to save registers)
 
 // RTC Overflow, occurs every 1s, phase 0
 ISR(RTC_OVF_vect) {
+	if(testbit(WOptions,seconds)) SyncTime(); // kamotswind - Force sync every second if seconds display enabled
     EXTCOMMH();                 // Changing a bit in a VPORT does not change the the Status Register either
 	if(backlight) { // kamotswind - new back-light timeout
 		if((lastbacklight+3) <= TCF0.CNT) { // 3 second back-light timeout. TODO make user configurable 
@@ -300,10 +301,6 @@ void WATCH(void) {
             // If double buffered not used, send data to display here
             if(!testbit(WOptions,seconds) || Selected) {   // Don't use double buffer in low power or when changing time
                 dma_display();
-            }
-            else {
-                now.sec++;
-                if(now.sec>=60) now.sec=0;                      
             }
             clrbit(WOptions,update);
             WaitDisplay();
